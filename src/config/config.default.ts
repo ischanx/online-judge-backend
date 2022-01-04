@@ -17,6 +17,12 @@ export default (appInfo: EggAppInfo) => {
     replaceEggLogger: true,
   };
 
+  config.jwt = {
+    enable: true,
+    secret: 'test',
+    ignore: ['/api/user/login'],
+  };
+
   // config.security = {
   //   csrf: false,
   // };
