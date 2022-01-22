@@ -20,7 +20,7 @@ export default (appInfo: EggAppInfo) => {
   config.jwt = {
     enable: true,
     secret: 'test',
-    ignore: ['/api/user/login'],
+    ignore: ['/api/user/login','/api/user/register','/api/user/registerEmail','/api/user/confirmEmail'],
   };
 
   // config.security = {
