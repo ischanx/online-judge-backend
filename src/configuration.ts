@@ -3,10 +3,12 @@ import { ILifeCycle } from '@midwayjs/core';
 import { Application } from 'egg';
 import { join } from 'path';
 import * as typegoose from '@midwayjs/typegoose';
+import * as redis from '@midwayjs/redis';
 
 @Configuration({
   imports: [
-    typegoose                                           // 加载 typegoose 组件
+    typegoose,
+    redis,
   ],
   importConfigs: [join(__dirname, './config')],
   conflictCheck: true,
