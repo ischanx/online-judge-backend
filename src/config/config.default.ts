@@ -27,5 +27,16 @@ export default (appInfo: EggAppInfo) => {
   //   csrf: false,
   // };
 
+  config.mongoose = {
+    client: {
+      uri: 'mongodb://localhost:27017/oj',
+      options: {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        // user: '***********',
+        // pass: '***********'
+      }
+    }
+  }
   return config;
 };
