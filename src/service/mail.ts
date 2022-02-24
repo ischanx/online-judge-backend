@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer');
 import { Provide } from '@midwayjs/decorator';
 const serverOptions = {
   // pool: true,
-  host: "smtp.qiye.aliyun.com",
+  host: 'smtp.qiye.aliyun.com',
   port: 465,
   secure: true, // use TLS
   auth: {
@@ -12,20 +12,20 @@ const serverOptions = {
 };
 @Provide()
 export class MailService {
-  async send(options){
+  async send(options) {
     const transporter = nodemailer.createTransport(serverOptions);
     const mailOptions = {
       from: 'onlinejudge@chanx.tech',
       ...options,
     };
-    return new Promise((resolve,reject) => {
+    return new Promise((resolve, reject) => {
       // 调用函数，发送邮件
-      transporter.sendMail(mailOptions, function(err, data) {
+      transporter.sendMail(mailOptions, (err, data) => {
         if (err) {
           reject(err);
         }
         resolve(data);
       });
-    })
+    });
   }
-};
+}

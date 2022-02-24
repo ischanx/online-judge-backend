@@ -1,7 +1,7 @@
 import { Inject, Provide } from '@midwayjs/decorator';
 import { InjectEntityModel } from '@midwayjs/typegoose';
 import { ReturnModelType } from '@typegoose/typegoose';
-import {ProblemDTO, ProblemModel} from '../model/problem';
+import { ProblemDTO, ProblemModel } from '../model/problem';
 import { RedisService } from '@midwayjs/redis';
 
 @Provide()

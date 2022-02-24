@@ -10,5 +10,4 @@ export class APIController {
 
   @Inject()
   userService: UserService;
-
 }

@@ -6,10 +6,7 @@ import * as typegoose from '@midwayjs/typegoose';
 import * as redis from '@midwayjs/redis';
 
 @Configuration({
-  imports: [
-    typegoose,
-    redis,
-  ],
+  imports: [typegoose, redis],
   importConfigs: [join(__dirname, './config')],
   conflictCheck: true,
 })
