@@ -11,7 +11,6 @@ import {
 import { RedisService } from '@midwayjs/redis';
 import { Validate } from '@midwayjs/decorator';
 import { Context } from 'egg';
-import { JudgeService } from '../service/judge';
 import { ProblemService } from '../service/problem';
 import {
   ProblemDTO,
@@ -32,9 +31,6 @@ export class ProblemController {
 
   @Inject()
   problemService: ProblemService;
-
-  @Inject()
-  judgeService: JudgeService;
 
   @Get('/list')
   async list() {
