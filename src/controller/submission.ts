@@ -120,4 +120,11 @@ export class SubmissionController {
       status: result ? 'success' : 'pending',
     });
   }
+
+  @Post('/list')
+  async list() {
+    const response = this.ctx.body;
+    const res = await this.submissionService.list();
+    response.data = res;
+  }
 }

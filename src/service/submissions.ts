@@ -23,7 +23,7 @@ export class SubmissionsService {
   }
 
   async list() {
-    return this.submissionModel.find();
+    return this.submissionModel.find({}, { code: 0, log: 0 });
   }
 
   async getBySubmissionId(id) {
