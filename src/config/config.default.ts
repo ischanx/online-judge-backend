@@ -20,7 +20,13 @@ export default (appInfo: EggAppInfo) => {
   config.jwt = {
     enable: true,
     secret: 'test',
-    ignore: ['/api/user/login','/api/user/register','/api/user/registerEmail','/api/user/confirmEmail'],
+    ignore: [
+      '/api/user/login',
+      '/api/user/register',
+      '/api/user/registerEmail',
+      '/api/user/confirmEmail',
+      '/api/submission/update',
+    ],
   };
 
   // config.security = {
@@ -35,16 +41,18 @@ export default (appInfo: EggAppInfo) => {
         useUnifiedTopology: true,
         // user: '***********',
         // pass: '***********'
-      }
-    }
-  }
+      },
+    },
+  };
 
   config.redis = {
     client: {
       port: 6379, // Redis port
-      host: "127.0.0.1", // Redis host
+      host: '127.0.0.1', // Redis host
       db: 1,
     },
   };
+
+  config.JUDGE_TOKEN = 'preset token for authentication'; // 提前配置的评测机token，后端评测机管理需要
   return config;
 };

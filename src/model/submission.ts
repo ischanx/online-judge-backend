@@ -20,25 +20,52 @@ export class SubmissionDTO {
 
 class JudgeModel {
   @prop()
-  public memory: number;
+  @Rule(RuleType.string())
+  public error: string;
 
   @prop()
+  @Rule(RuleType.string().required())
+  public message: string;
+
+  @prop()
+  @Rule(RuleType.number())
   public time: number;
 
   @prop()
-  public stdin: string;
+  @Rule(RuleType.number())
+  public memory: number;
 
   @prop()
+  @Rule(RuleType.number())
+  public startTime: number;
+
+  @prop()
+  @Rule(RuleType.number())
+  public endTime: number;
+
+  @prop()
+  @Rule(RuleType.number())
+  public realTime: number;
+
+  @prop()
+  @Rule(RuleType.string())
+  public compareDetail: string;
+
+  @prop()
+  @Rule(RuleType.boolean())
+  public pass: boolean;
+
+  @prop()
+  @Rule(RuleType.string())
   public stdout: string;
 
-  // @prop()
-  // public expectedStdout?: string;
+  @prop()
+  @Rule(RuleType.number())
+  public totalCorrect: number;
 
   @prop()
-  public stderr: string;
-
-  @prop()
-  public pass: boolean;
+  @Rule(RuleType.number())
+  public totalCount: number;
 }
 
 @EntityModel()
@@ -70,11 +97,28 @@ export class SubmissionModel extends SubmissionDTO {
   @prop({ type: () => JudgeModel })
   public result?: JudgeModel;
 
+  // @prop()
+  // public stdin: string;
+
+  // @prop()
+  // public expectedStdout?: string;
+
   @prop()
-  public runInfo: string;
+  public log: string;
 }
 
 export class getBySubmissionIdDTO {
   @Rule(RuleType.string().required().length(24).hex())
   id: string;
+}
+
+export class updateBySubmissionIdDTO {
+  @Rule(RuleType.string().required().length(24).hex())
+  submissionId: string;
+
+  @Rule(JudgeModel)
+  result: JudgeModel;
+
+  @Rule(RuleType.string().required())
+  log: string;
 }

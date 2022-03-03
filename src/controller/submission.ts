@@ -11,7 +11,12 @@ import { RedisService } from '@midwayjs/redis';
 import { Context } from 'egg';
 import { ProblemService } from '../service/problem';
 import { SubmissionsService } from '../service/submissions';
-import { getBySubmissionIdDTO, SubmissionDTO } from '../model/submission';
+import {
+  getBySubmissionIdDTO,
+  SubmissionDTO,
+  updateBySubmissionIdDTO,
+} from '../model/submission';
+import { JudgeManagerService } from '../service/judgeManager';
 
 @Provide()
 @Controller('/api/submission')
@@ -27,6 +32,8 @@ export class SubmissionController {
 
   @Inject()
   submissionService: SubmissionsService;
+  @Inject()
+  judgeManagerService: JudgeManagerService;
 
   @Post('/submit')
   @Validate()
@@ -56,6 +63,13 @@ export class SubmissionController {
     const submitResult = await this.submissionService.submit(obj);
     const submissionId = submitResult._id;
     if (submitResult) {
+      await this.judgeManagerService.deliverTask({
+        submissionId,
+        code,
+        lang,
+        problemId,
+        ...JSON.parse(JSON.stringify(problem)),
+      });
       response.data = {
         submissionId,
       };
@@ -74,7 +88,7 @@ export class SubmissionController {
     const response = this.ctx.body;
     const res = await this.submissionService.getBySubmissionId(id);
     if (res) {
-      if (res.status === 'pending') response.data = { status: 'pending' };
+      if (!res.result) response.data = { status: 'pending' };
       else response.data = res;
     } else {
       throw {
@@ -82,5 +96,28 @@ export class SubmissionController {
         message: '提交记录不存在',
       };
     }
+  }
+
+  @Post('/update')
+  @Validate()
+  async update(@Body(ALL) body: updateBySubmissionIdDTO) {
+    if (
+      this.ctx.header['x-judge-server-token'] !==
+      this.ctx.app.config.JUDGE_TOKEN
+    ) {
+      console.error(
+        `收到未知评测机的请求[${this.ctx.header['x-judge-server-token']}]`
+      );
+      throw {
+        code: 4001,
+        message: '评测机token不一致',
+      };
+    }
+    const { submissionId, log, result } = body;
+    await this.submissionService.updateBySubmissionId(submissionId, {
+      result,
+      log,
+      status: result ? 'success' : 'pending',
+    });
   }
 }
