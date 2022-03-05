@@ -1,13 +1,12 @@
 import { prop, Ref } from '@typegoose/typegoose';
 import { EntityModel } from '@midwayjs/typegoose';
 import { UserModel } from './user';
-import { ProblemModel } from './problem';
 import { Rule, RuleType } from '@midwayjs/decorator';
 
 export class SubmissionDTO {
-  @prop({ ref: () => ProblemModel })
-  @Rule(RuleType.string().required().length(24).hex())
-  public problemId: Ref<ProblemModel>;
+  @prop()
+  @Rule(RuleType.number().required())
+  public problemId: number;
 
   @prop()
   @Rule(RuleType.string().required().min(1).max(10000))
@@ -70,10 +69,6 @@ class JudgeModel {
 
 @EntityModel()
 export class SubmissionModel extends SubmissionDTO {
-  @prop()
-  @Rule(RuleType.string().required().max(5))
-  public problemNumber: string;
-
   @prop()
   @Rule(RuleType.string().required().min(1).max(20))
   public problemTitle: string;

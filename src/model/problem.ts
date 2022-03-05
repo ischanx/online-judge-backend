@@ -57,6 +57,9 @@ export class ProblemDTO {
 @EntityModel()
 export class ProblemModel extends ProblemDTO {
   @prop()
+  public id: number;
+
+  @prop()
   public createTime: number;
 
   @prop()
@@ -67,24 +70,19 @@ export class ProblemModel extends ProblemDTO {
 }
 
 export class UpdateDTO {
-  @Rule(RuleType.string().required().length(24))
-  problemId: string;
+  @Rule(RuleType.number().required())
+  id: number;
 
   @Rule(ProblemDTO)
   data: ProblemDTO;
 }
 
 export class DeleteDTO {
-  @Rule(RuleType.string().required().length(24))
-  problemId: string;
+  @Rule(RuleType.number().required())
+  id: number;
 }
 
 export class QueryByProblemIdDTO {
-  @Rule(RuleType.string().required().length(24))
-  id: string;
-}
-
-export class QueryByProblemNumDTO {
-  @Rule(RuleType.string().required().max(5))
-  number: string;
+  @Rule(RuleType.number().required())
+  id: number;
 }

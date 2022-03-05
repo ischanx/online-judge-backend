@@ -40,9 +40,7 @@ export class SubmissionController {
   async submit(@Body(ALL) body: SubmissionDTO) {
     const { lang, code, problemId } = body;
     const response = this.ctx.body;
-    const problem = await this.problemService.queryByProblemId(
-      String(problemId)
-    );
+    const problem = await this.problemService.queryByProblemId(problemId);
     if (!problem) {
       throw {
         code: 4002,
@@ -53,7 +51,6 @@ export class SubmissionController {
       problemId,
       code,
       lang,
-      problemNumber: problem.number,
       problemTitle: problem.title,
       uid: this.ctx.state.user.uuid,
       username: this.ctx.state.user.name,

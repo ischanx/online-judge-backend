@@ -17,7 +17,6 @@ import {
   DeleteDTO,
   UpdateDTO,
   QueryByProblemIdDTO,
-  QueryByProblemNumDTO,
 } from '../model/problem';
 
 @Provide()
@@ -40,23 +39,6 @@ export class ProblemController {
       count: list.length,
       list,
     };
-  }
-
-  @Get('/getByNumber')
-  @Validate()
-  async getByNum(@Query(ALL) query: QueryByProblemNumDTO) {
-    const response = this.ctx.body;
-    const { number } = query;
-
-    const res = await this.problemService.queryByProblemNum(number);
-    if (res) {
-      response.data = res;
-    } else {
-      throw {
-        code: 4002,
-        message: '题目不存在',
-      };
-    }
   }
 
   @Get('/getById')
@@ -82,10 +64,9 @@ export class ProblemController {
     const newProblem = body;
     const res = await this.problemService.add(newProblem);
     const response = this.ctx.body;
-    if (res._id) {
+    if (res.id) {
       response.data = {
-        problemId: res._id,
-        problemNum: res.number,
+        id: res.id,
       };
     } else {
       throw {
@@ -98,8 +79,8 @@ export class ProblemController {
   @Post('/update')
   @Validate()
   async update(@Body(ALL) body: UpdateDTO) {
-    const { problemId, data } = body;
-    const res = await this.problemService.updateByProblemId(problemId, data);
+    const { id, data } = body;
+    const res = await this.problemService.updateByProblemId(id, data);
     if (res.nModified === 0) {
       throw {
         code: 5001,
@@ -111,8 +92,8 @@ export class ProblemController {
   @Post('/delete')
   @Validate()
   async delete(@Body(ALL) body: DeleteDTO) {
-    const { problemId } = body;
-    const res = await this.problemService.deleteByProblemId(problemId);
+    const { id } = body;
+    const res = await this.problemService.deleteByProblemId(id);
     if (res === null) {
       throw {
         code: 4002,
