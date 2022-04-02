@@ -48,4 +48,15 @@ export class UserService {
       });
     }
   }
+
+  async sendCode(email) {
+    const code = generateString(6);
+    await this.redisService.set('confirmEmail' + email + code, code, 'EX', 300);
+    // 把code发到指定邮箱
+    this.mailService.send({
+      to: email,
+      subject: '你的验证码到了！有效期五分钟',
+      html: `<h1>${code}</h1>`,
+    });
+  }
 }

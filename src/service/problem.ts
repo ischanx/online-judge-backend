@@ -34,7 +34,7 @@ export class ProblemService {
   }
 
   async queryAll() {
-    return this.problemModel.find();
+    return this.problemModel.find({}, { _id: 0, __v: 0, samples: 0 });
   }
 
   async queryByProblemId(problemId: number) {

@@ -3,6 +3,7 @@ import { InjectEntityModel } from '@midwayjs/typegoose';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { RedisService } from '@midwayjs/redis';
 import { SubmissionModel } from '../model/submission';
+const mongoose = require('mongoose');
 
 @Provide()
 export class SubmissionsService {
@@ -23,7 +24,16 @@ export class SubmissionsService {
   }
 
   async list() {
-    return this.submissionModel.find({}, { code: 0, log: 0 });
+    return this.submissionModel
+      .find({ status: 'success' }, { code: 0, log: 0 })
+      .sort({ createTime: -1 });
+  }
+
+  async listUserSubmissionByProblemId({ userId, problemId }) {
+    return this.submissionModel.find(
+      { uid: mongoose.Types.ObjectId(userId), problemId },
+      { code: 0, log: 0 }
+    );
   }
 
   async getBySubmissionId(id) {

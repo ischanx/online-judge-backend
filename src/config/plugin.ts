@@ -6,4 +6,8 @@ export default {
     enable: true,
     package: 'egg-jwt',
   },
+  cors: {
+    enable: true,
+    package: 'egg-cors',
+  },
 } as EggPlugin;

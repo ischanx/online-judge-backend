@@ -5,7 +5,7 @@ import { Rule, RuleType } from '@midwayjs/decorator';
 
 export class SubmissionDTO {
   @prop()
-  @Rule(RuleType.number().required())
+  @Rule(RuleType.number())
   public problemId: number;
 
   @prop()
@@ -15,6 +15,12 @@ export class SubmissionDTO {
   @prop()
   @Rule(RuleType.string().required())
   public lang: string;
+
+  @Rule(RuleType.number())
+  public contestId?: number;
+
+  @Rule(RuleType.number())
+  public problemNumber?: number;
 }
 
 class JudgeModel {
@@ -23,7 +29,7 @@ class JudgeModel {
   public error: string;
 
   @prop()
-  @Rule(RuleType.string().required())
+  @Rule(RuleType.string())
   public message: string;
 
   @prop()
@@ -110,6 +116,12 @@ export class getBySubmissionIdDTO {
 export class updateBySubmissionIdDTO {
   @Rule(RuleType.string().required().length(24).hex())
   submissionId: string;
+
+  @Rule(RuleType.number())
+  public contestId?: number;
+
+  @Rule(RuleType.number())
+  public problemNumber?: number;
 
   @Rule(JudgeModel)
   result: JudgeModel;

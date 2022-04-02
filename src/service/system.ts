@@ -27,4 +27,8 @@ export class SystemInfoService {
   async getProblemTotal() {
     return this.getNextSequenceValue('ADD_PROBLEM_TOTAL');
   }
+
+  async getContestTotal() {
+    return this.getNextSequenceValue('ADD_CONTEST_TOTAL');
+  }
 }

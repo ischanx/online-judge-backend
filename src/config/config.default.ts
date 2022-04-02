@@ -25,6 +25,7 @@ export default (appInfo: EggAppInfo) => {
       '/api/user/register',
       '/api/user/registerEmail',
       '/api/user/confirmEmail',
+      '/api/user/sendCode',
       '/api/submission/update',
     ],
   };
@@ -55,5 +56,12 @@ export default (appInfo: EggAppInfo) => {
   };
 
   config.JUDGE_TOKEN = 'preset token for authentication'; // 提前配置的评测机token，后端评测机管理需要
+
+  config.cors = {
+    origin: '*',
+    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
+    // {string|Function} origin: '*',
+    // {string|Array} allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH'
+  };
   return config;
 };
