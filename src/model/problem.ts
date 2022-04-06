@@ -2,18 +2,20 @@ import { prop } from '@typegoose/typegoose';
 import { EntityModel } from '@midwayjs/typegoose';
 import { Rule, RuleType } from '@midwayjs/decorator';
 
+class File {
+  @prop()
+  public name: string;
+  @prop()
+  public size: number;
+  @prop()
+  public md5: string;
+}
 class Sample {
   @prop()
-  @Rule(RuleType.string().required())
-  public type: string;
+  public input: File;
 
   @prop()
-  @Rule(RuleType.string().required())
-  public input: string;
-
-  @prop()
-  @Rule(RuleType.string().required())
-  public output: string;
+  public output: File;
 }
 
 export class ProblemDTO {
@@ -25,9 +27,13 @@ export class ProblemDTO {
   @Rule(RuleType.string().required().min(1))
   public content: string;
 
-  @prop({ type: () => Sample })
-  @Rule(Sample)
-  public samples: Sample[];
+  // @prop({ type: () => Sample })
+  // @Rule(Sample)
+  // public samples: Sample[];
+
+  @prop()
+  @Rule(RuleType.string().required().min(1))
+  public samplesFile: string;
 
   @prop()
   @Rule(RuleType.number().required().min(1000).max(10000))
@@ -52,6 +58,10 @@ export class ProblemDTO {
   @prop()
   @Rule(RuleType.string())
   public example?: string;
+
+  @prop()
+  @Rule(RuleType.number().required().min(0).max(2))
+  public difficulty: number;
 }
 
 @EntityModel()
@@ -67,6 +77,9 @@ export class ProblemModel extends ProblemDTO {
 
   @prop()
   public number: string;
+
+  @prop({ type: () => Sample })
+  public samples: Sample[];
 }
 
 export class UpdateDTO {

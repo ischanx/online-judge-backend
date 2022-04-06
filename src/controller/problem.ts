@@ -62,6 +62,12 @@ export class ProblemController {
   async add(@Body(ALL) body: ProblemDTO) {
     // 新添加的题目数据
     const newProblem = body;
+    const isDone: any = await this.redisService.get(newProblem.samplesFile);
+    if (!isDone)
+      throw {
+        code: 4003,
+        message: 'md5未计算完',
+      };
     const res = await this.problemService.add(newProblem);
     const response = this.ctx.body;
     if (res.id) {

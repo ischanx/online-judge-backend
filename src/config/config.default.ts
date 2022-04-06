@@ -1,5 +1,5 @@
 import { EggAppConfig, EggAppInfo, PowerPartial } from 'egg';
-
+const os = require('os');
 export type DefaultConfig = PowerPartial<EggAppConfig>;
 
 export default (appInfo: EggAppInfo) => {
@@ -27,6 +27,7 @@ export default (appInfo: EggAppInfo) => {
       '/api/user/confirmEmail',
       '/api/user/sendCode',
       '/api/submission/update',
+      '/api/file/upload',
     ],
   };
 
@@ -36,7 +37,7 @@ export default (appInfo: EggAppInfo) => {
 
   config.mongoose = {
     client: {
-      uri: 'mongodb://localhost:27017/oj',
+      uri: 'mongodb://oj:oj@chanx.tech:27777/oj',
       options: {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -56,12 +57,18 @@ export default (appInfo: EggAppInfo) => {
   };
 
   config.JUDGE_TOKEN = 'preset token for authentication'; // 提前配置的评测机token，后端评测机管理需要
+  config.IS_DEV = os.platform() === 'win32';
 
   config.cors = {
     origin: '*',
     allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
     // {string|Function} origin: '*',
     // {string|Array} allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH'
+  };
+
+  // config/config.default.js
+  config.multipart = {
+    fileSize: '500mb',
   };
   return config;
 };

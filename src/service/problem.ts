@@ -4,6 +4,7 @@ import { ReturnModelType } from '@typegoose/typegoose';
 import { ProblemDTO, ProblemModel } from '../model/problem';
 import { RedisService } from '@midwayjs/redis';
 import { SystemInfoService } from './system';
+import { FileService } from './file';
 
 @Provide()
 export class ProblemService {
@@ -16,6 +17,9 @@ export class ProblemService {
   @Inject()
   systemInfoService: SystemInfoService;
 
+  @Inject()
+  fileService: FileService;
+
   async add(problemBasic) {
     const problemData = problemBasic as ProblemModel;
     // 系统添加过的题目的数量
@@ -24,6 +28,15 @@ export class ProblemService {
     problemData.id = count + 1;
     problemData.createTime = Date.now();
     problemData.updateTime = Date.now();
+    const computeResStr: any = await this.redisService.get(
+      problemData.samplesFile
+    );
+    const computeRes = JSON.parse(computeResStr);
+    problemData.samples = computeRes.samples;
+    await this.fileService.moveSample(
+      computeRes.dirName,
+      String(problemData.id)
+    );
     return await this.problemModel.create(problemData);
   }
 

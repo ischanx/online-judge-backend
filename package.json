@@ -12,10 +12,12 @@
     "@midwayjs/web": "^2.3.0",
     "@typegoose/typegoose": "^8.0.0",
     "axios": "^0.26.0",
+    "compressing": "^1.5.1",
     "egg": "^2.0.0",
     "egg-cors": "^2.2.3",
     "egg-jwt": "^3.1.7",
     "egg-scripts": "^2.10.0",
+    "joi": "^17.6.0",
     "mongoose": "^5.13.3",
     "nodemailer": "^6.7.2"
   },
