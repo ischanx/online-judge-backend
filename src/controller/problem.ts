@@ -12,12 +12,7 @@ import { RedisService } from '@midwayjs/redis';
 import { Validate } from '@midwayjs/decorator';
 import { Context } from 'egg';
 import { ProblemService } from '../service/problem';
-import {
-  ProblemDTO,
-  DeleteDTO,
-  UpdateDTO,
-  QueryByProblemIdDTO,
-} from '../model/problem';
+import { DeleteDTO, QueryByProblemIdDTO } from '../model/problem';
 
 @Provide()
 @Controller('/api/problem')
@@ -59,7 +54,7 @@ export class ProblemController {
 
   @Post('/add')
   @Validate()
-  async add(@Body(ALL) body: ProblemDTO) {
+  async add(@Body(ALL) body: any) {
     // 新添加的题目数据
     const newProblem = body;
     const isDone: any = await this.redisService.get(newProblem.samplesFile);
@@ -84,8 +79,17 @@ export class ProblemController {
 
   @Post('/update')
   @Validate()
-  async update(@Body(ALL) body: UpdateDTO) {
+  async update(@Body(ALL) body: any) {
     const { id, data } = body;
+    if (data.samplesFile) {
+      const isDone: any = await this.redisService.get(data.samplesFile);
+      if (!isDone)
+        throw {
+          code: 4003,
+          message: 'md5未计算完',
+        };
+    }
+
     const res = await this.problemService.updateByProblemId(id, data);
     if (res.nModified === 0) {
       throw {

@@ -36,4 +36,13 @@ export class ContestService {
       { _id: 0, __v: 0, 'problemList._id': 0 }
     );
   }
+
+  async update(id: number, data: any) {
+    data.id && delete data.id;
+    return this.contestModel.updateOne({ id }, data);
+  }
+
+  async delete(id: number) {
+    return this.contestModel.deleteOne({ id });
+  }
 }

@@ -72,10 +72,28 @@ export class ContestController {
   }
 
   @Post('/update')
-  async update() {}
+  async update() {
+    const { id, data } = this.ctx.request.body;
+    if (!id || !data) {
+      throw {
+        code: 4001,
+        message: '缺少参数',
+      };
+    }
+    await this.contestService.update(id, data);
+  }
 
   @Post('/delete')
-  async delete() {}
+  async delete() {
+    const { id } = this.ctx.request.body;
+    if (!id) {
+      throw {
+        code: 4001,
+        message: '缺少参数id',
+      };
+    }
+    await this.contestService.delete(id);
+  }
 
   @Get('/getContestProblem')
   @Validate()
@@ -93,6 +111,11 @@ export class ContestController {
     const problem = await this.problemService.queryByProblemId(
       contest.problemList[problemNumber - 1].id
     );
+    if (!problem)
+      throw {
+        code: 4003,
+        message: '题目已被删除',
+      };
     problem.title = contest.problemList[problemNumber - 1].title;
     response.data = problem;
   }

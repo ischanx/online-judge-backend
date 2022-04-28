@@ -64,7 +64,7 @@ export class SubmissionController {
       lang,
       problemTitle: problem.title,
       uid: this.ctx.state.user.uuid,
-      username: this.ctx.state.user.name,
+      username: this.ctx.state.user.username,
       status: 'pending',
     };
     let submitResult = null;
@@ -138,11 +138,15 @@ export class SubmissionController {
         problemNumber,
       });
     } else {
-      await this.submissionService.updateBySubmissionId(submissionId, {
-        result,
-        log,
-        status: result ? 'success' : 'pending',
-      });
+      const submit = await this.submissionService.updateBySubmissionId(
+        submissionId,
+        {
+          result,
+          log,
+          status: result ? 'success' : 'pending',
+        }
+      );
+      this.problemService.collectByProblemId(submit.problemId, result);
     }
   }
 

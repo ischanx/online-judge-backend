@@ -43,6 +43,17 @@ export class ProblemService {
   async updateByProblemId(id, obj: ProblemDTO) {
     const problemData = obj as ProblemModel;
     problemData.updateTime = Date.now();
+
+    if (problemData.samplesFile) {
+      const computeResStr: any = await this.redisService.get(
+        problemData.samplesFile
+      );
+      const computeRes = JSON.parse(computeResStr);
+      problemData.samples = computeRes.samples;
+      await this.fileService.moveSample(computeRes.dirName, String(id));
+    }
+    if (problemData.samplesFile === '') delete problemData.samplesFile;
+
     return this.problemModel.updateOne({ id: id }, problemData);
   }
 
@@ -61,5 +72,13 @@ export class ProblemService {
     return this.problemModel.findOneAndDelete({
       id: problemId,
     });
+  }
+
+  async collectByProblemId(problemId: number, result: any) {
+    const updateObj: any = {
+      totalSubmit: 1,
+    };
+    if (result.error) updateObj.errorSubmit = 1;
+    return this.problemModel.updateOne({ id: problemId }, { $inc: updateObj });
   }
 }

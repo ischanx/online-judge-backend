@@ -19,14 +19,17 @@ export class UserModel {
   public status: number;
 
   @prop()
-  public loginTime: Date;
+  public loginTime: number;
 
   @prop()
-  public registerTime: Date;
+  public registerTime: number;
 
   @prop()
   public nickname?: string;
 
   @prop()
   public permission?: string;
+
+  @prop()
+  public role?: number;
 }

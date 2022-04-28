@@ -83,8 +83,30 @@ export class FileService {
     const samplePath = this.IS_DEV
       ? path.resolve(`./upload-file/${problemId}`)
       : `/www/wwwroot/judge/sample/${problemId}`;
+    const removeDir = pathString => {
+      const statObj = fs.statSync(pathString); // fs.statSync同步读取文件状态，判断是文件目录还是文件。
+      if (statObj.isDirectory()) {
+        //如果是目录
+        let dirs = fs.readdirSync(pathString); //fs.readdirSync()同步的读取目标下的文件 返回一个不包括 '.' 和 '..' 的文件名的数组['b','a']
+        dirs = dirs.map(dir => path.join(pathString, dir)); //拼上完整的路径
+        for (let i = 0; i < dirs.length; i++) {
+          // 深度 先将儿子移除掉 再删除掉自己
+          removeDir(dirs[i]);
+        }
+        fs.rmdirSync(pathString); //删除目录
+      } else {
+        fs.unlinkSync(pathString); //删除文件
+      }
+    };
+    try {
+      removeDir(samplePath);
+    } catch (e) {
+      console.log(e);
+    }
+
     await new Promise(resolve => {
       fs.rename(unzipPath, samplePath, e => {
+        console.log(e);
         resolve(e);
       });
     });

@@ -59,4 +59,12 @@ export class UserService {
       html: `<h1>${code}</h1>`,
     });
   }
+
+  async listAll() {
+    return this.userModel.find({}, { _id: 0, __v: 0 });
+  }
+
+  async deleteUser(email: string) {
+    return this.userModel.deleteOne({ email });
+  }
 }

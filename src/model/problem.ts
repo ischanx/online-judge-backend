@@ -60,7 +60,7 @@ export class ProblemDTO {
   public example?: string;
 
   @prop()
-  @Rule(RuleType.number().required().min(0).max(2))
+  @Rule(RuleType.number().required())
   public difficulty: number;
 }
 
@@ -80,6 +80,12 @@ export class ProblemModel extends ProblemDTO {
 
   @prop({ type: () => Sample })
   public samples: Sample[];
+
+  @prop()
+  public totalSubmit: number;
+
+  @prop()
+  public errorSubmit: number;
 }
 
 export class UpdateDTO {

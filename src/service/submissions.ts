@@ -20,7 +20,7 @@ export class SubmissionsService {
 
   async updateBySubmissionId(id, obj) {
     obj.updateTime = Date.now();
-    return this.submissionModel.updateOne({ _id: id }, obj);
+    return this.submissionModel.findOneAndUpdate({ _id: id }, obj);
   }
 
   async list() {

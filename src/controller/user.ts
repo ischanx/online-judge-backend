@@ -178,16 +178,19 @@ export class UserController {
             uuid: data._id,
             username: data.username,
             email: data.email,
+            role: data.role || 0,
             expireTime: Date.now() + 1800000, // 有效期30分钟
           });
           await this.redisService.set('token' + token, 1, 'EX', 30 * 60);
           response.data = {
             token,
-            username: data._doc.username,
-            email: data._doc.email,
-            uid: data._doc._id,
+            role: data.role || 0,
+            username: data.username,
+            email: data.email,
+            uid: data._id,
             message: '登录成功',
           };
+          console.log(data.role);
         }
       } else {
         throw {
@@ -223,5 +226,31 @@ export class UserController {
     response.data = {
       message: '注销成功',
     };
+  }
+
+  @Get('/list')
+  async getUser() {
+    const response = this.ctx.response.body;
+    const res = await this.userService.listAll();
+    response.data = {
+      list: res,
+    };
+  }
+
+  @Post('/delete')
+  async deleteUser() {
+    const response = this.ctx.response.body;
+    const email = this.ctx.request.body.email;
+    const res = await this.userService.deleteUser(email);
+    if (res.deletedCount) {
+      response.data = {
+        message: `删除用户[${email}]成功`,
+      };
+    } else {
+      throw {
+        code: 4003,
+        message: `删除用户[${email}]失败`,
+      };
+    }
   }
 }
