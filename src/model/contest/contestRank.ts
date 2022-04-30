@@ -25,6 +25,9 @@ export class ContestRankModel {
   public userId: string;
 
   @prop()
+  public username: string;
+
+  @prop()
   public contestId: number;
 
   @prop()
