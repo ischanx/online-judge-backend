@@ -148,9 +148,9 @@ export class ContestController {
   async listUserSubmission() {
     const response = this.ctx.body;
     const res =
-      await this.contestSubmissionService.listUserSubmissionByProblemId({
+      await this.contestSubmissionService.listUserSubmissionByProblemNumber({
         userId: this.ctx.state.user.uuid,
-        problemId: this.ctx.request.body.problemId,
+        problemNumber: this.ctx.request.body.problemNumber,
         contestId: this.ctx.request.body.contestId,
       });
     response.data = res;

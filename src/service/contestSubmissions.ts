@@ -43,9 +43,13 @@ export class ContestSubmissionsService {
     return this.contestSubmissionModel.findOne({ _id: id });
   }
 
-  async listUserSubmissionByProblemId({ userId, problemId, contestId }) {
+  async listUserSubmissionByProblemNumber({
+    userId,
+    problemNumber,
+    contestId,
+  }) {
     return this.contestSubmissionModel.find(
-      { uid: mongoose.Types.ObjectId(userId), problemId, contestId },
+      { uid: mongoose.Types.ObjectId(userId), problemNumber, contestId },
       { code: 0, log: 0 }
     );
   }
