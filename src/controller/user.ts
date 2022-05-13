@@ -179,9 +179,9 @@ export class UserController {
             username: data.username,
             email: data.email,
             role: data.role || 0,
-            expireTime: Date.now() + 1800000, // 有效期30分钟
+            expireTime: Date.now() + 24 * 60 * 60 * 1000, // 有效期1天
           });
-          await this.redisService.set('token' + token, 1, 'EX', 30 * 60);
+          await this.redisService.set('token' + token, 1, 'EX', 24 * 60 * 60);
           response.data = {
             token,
             role: data.role || 0,
