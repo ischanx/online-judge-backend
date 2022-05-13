@@ -103,8 +103,20 @@ export class SubmissionController {
     const response = this.ctx.body;
     const res = await this.submissionService.getBySubmissionId(id);
     if (res) {
-      if (!res.result) response.data = { status: 'pending' };
-      else response.data = res;
+      if (!res.result) {
+        // @TODO 抽取时间配置
+        // 15s内评测不生效则结果为等待评测超时请重试
+        if (Date.now() - res.createTime > 15000) {
+          await this.submissionService.updateBySubmissionId(id, {
+            status: 'timeout',
+            result: {
+              pass: false,
+              error: '等待评测超时',
+            },
+          });
+          response.data = await this.submissionService.getBySubmissionId(id);
+        } else response.data = { status: 'pending' };
+      } else response.data = res;
     } else {
       throw {
         code: 4002,
