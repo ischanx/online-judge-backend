@@ -16,4 +16,19 @@ export class JudgeModel {
 
   @prop()
   public updateTime: number;
+
+  @prop()
+  public judge_version: string;
+
+  @prop()
+  public hostname: string;
+
+  @prop()
+  public cpu_core: number;
+
+  @prop()
+  public cpu_model: string;
+
+  @prop()
+  public memory_total: number;
 }
