@@ -28,6 +28,7 @@ export class ContestRankService {
       createTime,
       result,
       _id: submissionId,
+      username,
     } = submission;
     if (result.error === 'Compile Error') return; // CE不计算
     const lastRank = await this.contestRankModel.findOneAndUpdate(
@@ -91,6 +92,7 @@ export class ContestRankService {
     lastRank.totalScore = totalScore;
     lastRank.updateTime = createTime;
     lastRank.list = list;
+    lastRank.username = username;
     await this.contestRankModel.updateOne(
       {
         contestId,
