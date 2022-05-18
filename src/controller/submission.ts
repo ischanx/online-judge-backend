@@ -20,6 +20,7 @@ import { JudgeManagerService } from '../service/judgeManager';
 import { ContestSubmissionsService } from '../service/contestSubmissions';
 import { ContestService } from '../service/contest';
 import { getCurrentTimestamp } from '../utils/generate';
+import { UserService } from '../service/user';
 
 @Provide()
 @Controller('/api/submission')
@@ -44,6 +45,9 @@ export class SubmissionController {
 
   @Inject()
   judgeManagerService: JudgeManagerService;
+
+  @Inject()
+  userService: UserService;
 
   @Post('/submit')
   @Validate()
@@ -73,7 +77,10 @@ export class SubmissionController {
       const contest = await this.contestService.listOne(contestId);
       obj.problemId = contest.problemList[problemNumber - 1].id;
       submitResult = await this.contestSubmissionService.submit(obj);
-    } else submitResult = await this.submissionService.submit(obj);
+    } else {
+      submitResult = await this.submissionService.submit(obj);
+      this.userService.collectSubmitByUid(this.ctx.state.user.uuid);
+    }
 
     const submissionId = submitResult._id;
     if (submitResult) {
@@ -81,6 +88,7 @@ export class SubmissionController {
         submissionId,
         code,
         lang,
+        uid: this.ctx.state.user.uuid,
         problemId: obj.problemId,
         contestId,
         problemNumber,
@@ -141,7 +149,7 @@ export class SubmissionController {
         message: '评测机token不一致',
       };
     }
-    const { submissionId, log, result, contestId, problemNumber } = body;
+    const { submissionId, log, result, contestId, problemNumber, uid } = body;
     if (contestId && problemNumber) {
       await this.contestSubmissionService.updateBySubmissionId(submissionId, {
         result,
@@ -160,6 +168,7 @@ export class SubmissionController {
         }
       );
       this.problemService.collectByProblemId(submit.problemId, result);
+      this.userService.collectSubmitResultByUid(uid, !result.error);
     }
   }
 

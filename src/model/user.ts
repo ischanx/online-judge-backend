@@ -32,4 +32,13 @@ export class UserModel {
 
   @prop()
   public role?: number;
+
+  @prop()
+  public totalSubmit?: number;
+
+  @prop()
+  public errorSubmit?: number;
+
+  @prop()
+  public successSubmit?: number;
 }

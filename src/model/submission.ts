@@ -128,4 +128,6 @@ export class updateBySubmissionIdDTO {
 
   @Rule(RuleType.string().required())
   log: string;
+
+  uid: string;
 }

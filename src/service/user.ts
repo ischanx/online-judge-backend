@@ -67,4 +67,30 @@ export class UserService {
   async deleteUser(email: string) {
     return this.userModel.deleteOne({ email });
   }
+
+  async collectSubmitByUid(uid: string) {
+    await this.userModel.findOneAndUpdate(
+      { _id: uid },
+      { $inc: { totalSubmit: 1 } },
+      {
+        upsert: true,
+        new: false,
+      }
+    );
+  }
+
+  async collectSubmitResultByUid(uid: string, success: boolean) {
+    const obj: any = {};
+    if (success) {
+      obj.errorSubmit = 1;
+    } else obj.successSubmit = 1;
+    await this.userModel.findOneAndUpdate(
+      { _id: uid },
+      { $inc: obj },
+      {
+        upsert: true,
+        new: false,
+      }
+    );
+  }
 }
