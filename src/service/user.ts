@@ -80,10 +80,11 @@ export class UserService {
   }
 
   async collectSubmitResultByUid(uid: string, success: boolean) {
+    console.log(uid);
     const obj: any = {};
     if (success) {
-      obj.errorSubmit = 1;
-    } else obj.successSubmit = 1;
+      obj.successSubmit = 1;
+    } else obj.errorSubmit = 1;
     await this.userModel.findOneAndUpdate(
       { _id: uid },
       { $inc: obj },

@@ -129,5 +129,6 @@ export class updateBySubmissionIdDTO {
   @Rule(RuleType.string().required())
   log: string;
 
+  @Rule(RuleType.string().required().length(24).hex())
   uid: string;
 }
