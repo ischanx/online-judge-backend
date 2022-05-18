@@ -126,6 +126,10 @@ export class UserController {
             message: '邮箱已注册，请更换邮箱重试',
           };
         }
+        await this.userService.sendCode(email);
+        response.data = {
+          message: '成功发送验证码',
+        };
       } else {
         await this.userService.sendCode(email);
         response.data = {
