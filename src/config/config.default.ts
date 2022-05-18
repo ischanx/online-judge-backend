@@ -27,6 +27,7 @@ export default (appInfo: EggAppInfo) => {
       '/api/user/confirmEmail',
       '/api/user/sendCode',
       '/api/user/profile',
+      '/api/user/resetPassword',
       '/api/submission/update',
       '/api/file/upload',
     ],

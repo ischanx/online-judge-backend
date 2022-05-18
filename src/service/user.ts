@@ -2,7 +2,7 @@ import { Inject, Provide } from '@midwayjs/decorator';
 import { InjectEntityModel } from '@midwayjs/typegoose';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { UserModel } from '../model/user';
-import { generateString } from '../utils/generate';
+import { generateHash, generateString } from '../utils/generate';
 import { MailService } from './mail';
 import { RedisService } from '@midwayjs/redis';
 
@@ -96,5 +96,19 @@ export class UserService {
 
   async getUserRank() {
     return this.userModel.find().sort({ totalSubmit: -1, successSubmit: -1 });
+  }
+
+  async resetPasswordByEmail(email: string) {
+    const password = generateString(6);
+    // 把code发到指定邮箱
+    await this.mailService.send({
+      to: email,
+      subject: '密码已被重置',
+      html: '新的密码是' + password,
+    });
+    return this.userModel.findOneAndUpdate(
+      { email },
+      { password: generateHash(password) }
+    );
   }
 }

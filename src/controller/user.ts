@@ -281,4 +281,10 @@ export class UserController {
       list: user,
     };
   }
+
+  @Post('/resetPassword')
+  async resetPassword() {
+    const { email } = this.ctx.request.body;
+    await this.userService.resetPasswordByEmail(email);
+  }
 }
