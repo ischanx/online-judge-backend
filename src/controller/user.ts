@@ -272,4 +272,13 @@ export class UserController {
       submissions,
     };
   }
+
+  @Get('/rank')
+  async getUserRank() {
+    const response = this.ctx.response.body;
+    const user = await this.userService.getUserRank();
+    response.data = {
+      list: user,
+    };
+  }
 }

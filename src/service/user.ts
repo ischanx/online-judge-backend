@@ -93,4 +93,8 @@ export class UserService {
       }
     );
   }
+
+  async getUserRank() {
+    return this.userModel.find().sort({ totalSubmit: -1, successSubmit: -1 });
+  }
 }
