@@ -3,6 +3,7 @@ import { InjectEntityModel } from '@midwayjs/typegoose';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { RedisService } from '@midwayjs/redis';
 import { SubmissionModel } from '../model/submission';
+import { getCurrentTimestamp } from '../utils/generate';
 const mongoose = require('mongoose');
 
 @Provide()
@@ -14,12 +15,12 @@ export class SubmissionsService {
   redisService: RedisService;
 
   async submit(obj) {
-    obj.createTime = Date.now();
+    obj.createTime = getCurrentTimestamp();
     return await this.submissionModel.create(obj);
   }
 
   async updateBySubmissionId(id, obj) {
-    obj.updateTime = Date.now();
+    obj.updateTime = getCurrentTimestamp();
     return this.submissionModel.findOneAndUpdate({ _id: id }, obj);
   }
 

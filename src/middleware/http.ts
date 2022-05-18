@@ -3,13 +3,14 @@ import { IWebMiddleware, IMidwayWebNext } from '@midwayjs/web';
 import { Context } from 'egg';
 // eslint-disable-next-line node/no-extraneous-import
 import { ValidationError } from 'joi';
+import { getCurrentTimestamp } from '../utils/generate';
 
 @Provide()
 export class HttpMiddleware implements IWebMiddleware {
   resolve() {
     return async (ctx: Context, next: IMidwayWebNext) => {
       // 控制器前执行的逻辑
-      const startTime = Date.now();
+      const startTime = getCurrentTimestamp();
       ctx.body = {
         code: 0,
         message: 'success',
@@ -37,7 +38,9 @@ export class HttpMiddleware implements IWebMiddleware {
       }
 
       // 控制器之后执行的逻辑
-      console.log(`${ctx.request.url} 耗时 ${Date.now() - startTime} ms`);
+      console.log(
+        `${ctx.request.url} 耗时 ${getCurrentTimestamp() - startTime} ms`
+      );
     };
   }
 }

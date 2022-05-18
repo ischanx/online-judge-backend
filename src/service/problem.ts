@@ -5,6 +5,7 @@ import { ProblemDTO, ProblemModel } from '../model/problem';
 import { RedisService } from '@midwayjs/redis';
 import { SystemInfoService } from './system';
 import { FileService } from './file';
+import { getCurrentTimestamp } from '../utils/generate';
 
 @Provide()
 export class ProblemService {
@@ -26,8 +27,8 @@ export class ProblemService {
     const count = await this.systemInfoService.getProblemTotal();
     // 设置新添加的题目编号
     problemData.id = count + 1;
-    problemData.createTime = Date.now();
-    problemData.updateTime = Date.now();
+    problemData.createTime = getCurrentTimestamp();
+    problemData.updateTime = getCurrentTimestamp();
     const computeResStr: any = await this.redisService.get(
       problemData.samplesFile
     );
@@ -42,7 +43,7 @@ export class ProblemService {
 
   async updateByProblemId(id, obj: ProblemDTO) {
     const problemData = obj as ProblemModel;
-    problemData.updateTime = Date.now();
+    problemData.updateTime = getCurrentTimestamp();
 
     if (problemData.samplesFile) {
       const computeResStr: any = await this.redisService.get(

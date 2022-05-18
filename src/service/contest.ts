@@ -4,6 +4,7 @@ import { ReturnModelType } from '@typegoose/typegoose';
 import { RedisService } from '@midwayjs/redis';
 import { ContestDTO, ContestModel } from '../model/contest/contest';
 import { SystemInfoService } from './system';
+import { getCurrentTimestamp } from '../utils/generate';
 
 @Provide()
 export class ContestService {
@@ -21,8 +22,8 @@ export class ContestService {
     const count = await this.systemInfoService.getContestTotal();
     // 设置新添加的比赛编号
     data.id = count + 1;
-    data.createTime = Date.now();
-    data.updateTime = Date.now();
+    data.createTime = getCurrentTimestamp();
+    data.updateTime = getCurrentTimestamp();
     return this.contestModel.create(data);
   }
 

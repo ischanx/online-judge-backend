@@ -2,6 +2,7 @@ import { Inject, Provide } from '@midwayjs/decorator';
 import { RedisService } from '@midwayjs/redis';
 import { IWebMiddleware, IMidwayWebNext } from '@midwayjs/web';
 import { Context } from 'egg';
+import { getCurrentTimestamp } from '../utils/generate';
 // eslint-disable-next-line node/no-extraneous-import,node/no-extraneous-require
 const UnauthorizedError = require('koa-jwt2/lib/errors/UnauthorizedError');
 
@@ -20,7 +21,7 @@ export class tokenVerify implements IWebMiddleware {
         ) {
           if (
             !ctx.state.user.expireTime ||
-            Date.now() > ctx.state.user.expireTime
+            getCurrentTimestamp() > ctx.state.user.expireTime
           ) {
             ctx.status = 401;
             ctx.body = {

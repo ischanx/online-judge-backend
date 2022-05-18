@@ -4,6 +4,7 @@ import { ReturnModelType } from '@typegoose/typegoose';
 import { RedisService } from '@midwayjs/redis';
 import { ContestSubmissionModel } from '../model/contest/contestSubmission';
 import { ContestRankService } from './rank';
+import { getCurrentTimestamp } from '../utils/generate';
 const mongoose = require('mongoose');
 
 @Provide()
@@ -18,12 +19,12 @@ export class ContestSubmissionsService {
   rankService: ContestRankService;
 
   async submit(obj) {
-    obj.createTime = Date.now();
+    obj.createTime = getCurrentTimestamp();
     return await this.contestSubmissionModel.create(obj);
   }
 
   async updateBySubmissionId(id, obj) {
-    obj.updateTime = Date.now();
+    obj.updateTime = getCurrentTimestamp();
     const updateRes = await this.contestSubmissionModel.findOneAndUpdate(
       { _id: id },
       obj,

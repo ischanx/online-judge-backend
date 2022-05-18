@@ -10,7 +10,7 @@ import { Context } from 'egg';
 import { UserService } from '../service/user';
 
 import { RedisService } from '@midwayjs/redis';
-import { generateHash } from '../utils/generate';
+import { generateHash, getCurrentTimestamp } from '../utils/generate';
 
 @Provide()
 @Controller('/api/user')
@@ -53,7 +53,7 @@ export class UserController {
           message: '验证码错误',
         };
       const registerInfo = {
-        registerTime: Date.now(),
+        registerTime: getCurrentTimestamp(),
         status: 1,
         username,
         password: generateHash(password),
@@ -173,13 +173,15 @@ export class UserController {
           };
           return;
         } else {
-          this.userService.update(data._id, { loginTime: Date.now() });
+          this.userService.update(data._id, {
+            loginTime: getCurrentTimestamp(),
+          });
           const token = this.jwt.sign({
             uuid: data._id,
             username: data.username,
             email: data.email,
             role: data.role || 0,
-            expireTime: Date.now() + 24 * 60 * 60 * 1000, // 有效期1天
+            expireTime: getCurrentTimestamp() + 24 * 60 * 60 * 1000, // 有效期1天
           });
           await this.redisService.set('token' + token, 1, 'EX', 24 * 60 * 60);
           response.data = {

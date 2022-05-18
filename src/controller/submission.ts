@@ -19,6 +19,7 @@ import {
 import { JudgeManagerService } from '../service/judgeManager';
 import { ContestSubmissionsService } from '../service/contestSubmissions';
 import { ContestService } from '../service/contest';
+import { getCurrentTimestamp } from '../utils/generate';
 
 @Provide()
 @Controller('/api/submission')
@@ -106,7 +107,7 @@ export class SubmissionController {
       if (!res.result) {
         // @TODO 抽取时间配置
         // 15s内评测不生效则结果为等待评测超时请重试
-        if (Date.now() - res.createTime > 15000) {
+        if (getCurrentTimestamp() - res.createTime > 15000) {
           await this.submissionService.updateBySubmissionId(id, {
             status: 'timeout',
             result: {

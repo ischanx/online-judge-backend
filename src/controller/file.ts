@@ -2,6 +2,7 @@ import { Controller, Provide, Inject, Post } from '@midwayjs/decorator';
 import { RedisService } from '@midwayjs/redis';
 import { Context } from 'egg';
 import { FileService } from '../service/file';
+import { getCurrentTimestamp } from '../utils/generate';
 const fs = require('fs');
 const path = require('path');
 
@@ -21,7 +22,7 @@ export class FileController {
   async add() {
     const part = this.ctx.multipart();
     const stream = await part();
-    const saveFileName = `${Date.now()}-${stream.filename}`;
+    const saveFileName = `${getCurrentTimestamp()}-${stream.filename}`;
     const savePath = this.ctx.app.config.IS_DEV
       ? path.resolve(`./upload-file/${saveFileName}`)
       : `/upload-file/${saveFileName}`;

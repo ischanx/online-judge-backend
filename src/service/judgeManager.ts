@@ -4,6 +4,7 @@ import axios from 'axios';
 import { InjectEntityModel } from '@midwayjs/typegoose';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { JudgeModel } from '../model/judge';
+import { getCurrentTimestamp } from '../utils/generate';
 
 let index = 0;
 @Provide()
@@ -37,8 +38,8 @@ export class JudgeManagerService {
       const judgeInfo = {
         active: false,
         judgeURL: judgeURL,
-        createTime: Date.now(),
-        updateTime: Date.now(),
+        createTime: getCurrentTimestamp(),
+        updateTime: getCurrentTimestamp(),
       };
       const saveKeys = [
         'judge_version',

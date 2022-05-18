@@ -41,3 +41,7 @@ export const generateHash = (source: string): string => {
   hash.update(source);
   return hash.digest('hex');
 };
+
+export const getCurrentTimestamp = (): number => {
+  return Date.now();
+};
