@@ -40,4 +40,8 @@ export class SubmissionsService {
   async getBySubmissionId(id) {
     return this.submissionModel.findOne({ _id: id });
   }
+
+  async getByUsername(username) {
+    return this.submissionModel.find({ username });
+  }
 }

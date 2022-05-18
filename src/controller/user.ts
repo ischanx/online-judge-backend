@@ -11,6 +11,7 @@ import { UserService } from '../service/user';
 
 import { RedisService } from '@midwayjs/redis';
 import { generateHash, getCurrentTimestamp } from '../utils/generate';
+import { SubmissionsService } from '../service/submissions';
 
 @Provide()
 @Controller('/api/user')
@@ -26,6 +27,9 @@ export class UserController {
 
   @Inject()
   redisService: RedisService;
+
+  @Inject()
+  submissionService: SubmissionsService;
 
   @Post('/register')
   async register() {
@@ -254,5 +258,18 @@ export class UserController {
         message: `删除用户[${email}]失败`,
       };
     }
+  }
+
+  @Get('/profile')
+  async getUserProfile() {
+    const response = this.ctx.response.body;
+    const { username } = this.ctx.request.query;
+    const user = await this.userService.find({ username });
+    const submissions = await this.submissionService.getByUsername(username);
+    response.data = {
+      username,
+      loginTime: user.loginTime,
+      submissions,
+    };
   }
 }
