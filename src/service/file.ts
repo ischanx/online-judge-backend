@@ -82,7 +82,7 @@ export class FileService {
       : `/upload-file/${dirName}`;
     const samplePath = this.IS_DEV
       ? path.resolve(`./upload-file/${problemId}`)
-      : `/www/wwwroot/judge/sample/${problemId}`;
+      : `/online-judge/sample/${problemId}`;
     const removeDir = pathString => {
       const statObj = fs.statSync(pathString); // fs.statSync同步读取文件状态，判断是文件目录还是文件。
       if (statObj.isDirectory()) {
