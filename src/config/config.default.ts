@@ -60,6 +60,15 @@ export default (appInfo: EggAppInfo) => {
 
   config.JUDGE_TOKEN = 'preset token for authentication'; // 提前配置的评测机token，后端评测机管理需要
   config.IS_DEV = os.platform() === 'win32';
+  config.MAIL_OPTIONS = {
+    host: 'smtp.qiye.aliyun.com',
+    port: 465,
+    secure: true, // use TLS
+    auth: {
+      user: 'onlinejudge@chanx.tech', // 账号
+      pass: '!onlinejudge123', // 授权码,
+    },
+  };
 
   config.cors = {
     origin: '*',
